@@ -29,7 +29,7 @@ The following **additional** features are implemented:
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+It took me a minute to figure out optimal spacing for the thumbnail and text to look decent together.
 
 ## License
 
