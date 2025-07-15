@@ -4,14 +4,17 @@
 //
 
 import UIKit
-import Nuke
+import NukeExtensions
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITableViewDataSource {
 
+    var posts: [Post] = []
 
+    @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.dataSource = self
         
         fetchPosts()
     }
@@ -48,6 +51,8 @@ class ViewController: UIViewController {
                     for post in posts {
                         print("🍏 Summary: \(post.summary)")
                     }
+                    self?.posts = posts
+                    self?.tableView.reloadData()
                 }
 
             } catch {
@@ -55,5 +60,22 @@ class ViewController: UIViewController {
             }
         }
         session.resume()
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return posts.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as! CustomTableViewCell
+        let post = posts[indexPath.row]
+        cell.titleLabel.text = post.summary
+
+        if let photo = post.photos.first {
+            let url = photo.originalSize.url
+            NukeExtensions.loadImage(with: url, into: cell.thumbnailImageView)
+        }
+
+        return cell
     }
 }
